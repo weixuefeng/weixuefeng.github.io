@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>POST 缓存方案 - Pony Blog</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com"><span>Github</span></a></li><li><a href="https://www.v2ex.com/"><span>V2EX</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button light" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/post_background.jpg"><div class="post-title"><h1 class="title">POST 缓存方案</h1><ul class="meta"><li><i class="icon icon-author"></i>卫雪峰</li><li><i class="icon icon-clock"></i>2 Minutes</li><li><i class="icon icon-calendar"></i>May 15, 2019</li></ul></div></div><div class="article-content" style="max-width:800px"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>当前应用中，一方面是有国外服务器，导致客户端请求数据慢，loading时间过长；另一方面是客户端页面跳转导致的多次频繁请求，很是影响用户体验和影响服务器性能，所以需要对客户端的请求做缓存处理，以便达到减轻服务器压力（减少重复请求次数）和对用户的友好体验（添加数据库缓存）的目的。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ol>
+<li>减轻服务器压力</li>
+<li>提高用户体验</li>
+</ol>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><ol>
+<li>针对每个接口设置不同的缓存策略（缓存时间）</li>
+<li>请求数据时先查询数据库，有数据就返回界面，同时网络请求，数据回来返回界面，更新数据库？</li>
+<li>请求数据先查询数据库，判断是否过期，没过期直接返回界面，否则请求网络，再刷新界面和更新数据库</li>
+<li>没有网络就直接返回数据库数据。</li>
+</ol>
+<h2 id="根据接口细化"><a href="#根据接口细化" class="headerlink" title="根据接口细化"></a>根据接口细化</h2><h4 id="完全不需要缓存"><a href="#完全不需要缓存" class="headerlink" title="完全不需要缓存"></a>完全不需要缓存</h4><ol>
+<li>sendAddress (创建钱包)</li>
+<li>sendPushInfo, unsubscribePushInfo, updatePusheToken(推送相关信息)</li>
+<li>getVerifyCode, versifyPhoneAndGetInviteCode, JsUrl, verifyTicket, verifyInviteCode(验证码信息相关)</li>
+<li>createNewId, restoreProfile, updateProfile,updateCellphone (创建，恢复，更新等接口)</li>
+<li>becomeCandidate, reapplyCandidate, quiteCandidate, updateNodeInfo(对节点动作的操作结果，只返回基础成功与否的接口)</li>
+<li>退票，加减仓相关</li>
+</ol>
+<h4 id="按照条件添加永久缓存"><a href="#按照条件添加永久缓存" class="headerlink" title="按照条件添加永久缓存"></a>按照条件添加永久缓存</h4><ol>
+<li>红包详情</li>
+<li>交易详情</li>
+</ol>
+<h4 id="较长时间缓存，服务端可做的缓存处理接口（规则等信息）"><a href="#较长时间缓存，服务端可做的缓存处理接口（规则等信息）" class="headerlink" title="较长时间缓存，服务端可做的缓存处理接口（规则等信息）"></a>较长时间缓存，服务端可做的缓存处理接口（规则等信息）</h4><ol>
+<li>fetchUpdateInfo (App更新信息)</li>
+<li>fetchThirdAppInfo, getHepDapp (Dapp 详细信息和Dapp 列表信息)</li>
+<li>getNewIdCondition, getVoteCondition, getNodeCondition，getRedPacketCondition</li>
+</ol>
+<h4 id="一天内时间的缓存"><a href="#一天内时间的缓存" class="headerlink" title="一天内时间的缓存"></a>一天内时间的缓存</h4><ol>
+<li>获取挖矿信息，奖励token信息，奖励 nf 信息等</li>
+<li>轮次信息</li>
+<li>获取全网的nf</li>
+</ol>
+<h4 id="要最新的数据，同时也要缓存的（短暂缓存，防止用户频繁刷新）"><a href="#要最新的数据，同时也要缓存的（短暂缓存，防止用户频繁刷新）" class="headerlink" title="要最新的数据，同时也要缓存的（短暂缓存，防止用户频繁刷新）"></a>要最新的数据，同时也要缓存的（短暂缓存，防止用户频繁刷新）</h4><ol>
+<li>获取用户的ProfileInfo</li>
+<li>获取公告信息 getAnnouncement</li>
+<li>红包的收发记录</li>
+<li>交易记录</li>
+</ol>
+<h2 id="技术调研"><a href="#技术调研" class="headerlink" title="技术调研"></a>技术调研</h2><ol>
+<li><p>RxCache:</p>
+<p> 使用注解方式对接口设置缓存策略，目前测试支持GET请求，（别人有参数一样的POST请求，但是自己测试post请求是缓存了，但是没有读取），缓存的结果到一个文件里面，使用LruDiskCache 算法处理缓存文件夹大小，还可以定制接口是否强制使用缓存，如果能忽略参数获取缓存结果这个方案还不错。</p>
+</li>
+<li><p>OkHttp3 设置 CacheInterceptor:</p>
+<p> 手动处理请求流程，在请求过程中，根据设置好的缓存策略和有无网络情况读取数据库或者网络数据，如果有缓存返回缓存数据，同时去网络请求，回来结果再返回数据，不过前台界面不好控制数据来源..</p>
+</li>
+</ol>
+</div><div class="article-meta" style="max-width:800px"></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cjvrt6gly0000gyfyshs9rxyf" data-title="POST 缓存方案" data-url="http://yoursite.com/2019/05/15/POST 缓存方案/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+var duoshuoQuery = {short_name: siteName};
+(function() {
+  var ds = document.createElement('script');
+  ds.type = 'text/javascript';ds.async = true;
+  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+  ds.charset = 'UTF-8';
+  (document.getElementsByTagName('head')[0] 
+  || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2019/05/10/多渠道包生成/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="https://github.com/weixuefeng" title="Github" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="https://blog.csdn.net/wxf468907066" title="CSDN" target="_blank"><i class="icon icon-CSDN"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2019 Pony Blog<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></div><script>var wrap = document.getElementById('wrap');
+window.onload = function () {
+  wrap.className += ' done';
+}</script></body></html>
