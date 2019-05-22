@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>数据库字符集问题 - Pony Blog</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com"><span>Github</span></a></li><li><a href="https://www.v2ex.com/"><span>V2EX</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button light" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/post_background.jpg"><div class="post-title"><h1 class="title">数据库字符集问题</h1><ul class="meta"><li><i class="icon icon-author"></i>卫雪峰</li><li><i class="icon icon-clock"></i>1 Minutes</li><li><i class="icon icon-calendar"></i>May 22, 2019</li></ul></div></div><div class="article-content" style="max-width:800px"><p>创建 Mysql 没有设置字符集，导致存储中文有问题，记录如下：</p>
+<p>一顿瞎比操作没有改了，好像导入数据库之后还是原先的字符集，手动设置了某个字段的字符集了</p>
+<h2 id="手动设置字符集"><a href="#手动设置字符集" class="headerlink" title="手动设置字符集"></a><a href="https://www.cnblogs.com/yangmingxianshen/p/7999428.html" target="_blank" rel="noopener">手动设置字符集</a></h2><ol>
+<li>停止API 服务；</li>
+<li><p>备份数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump database &#123;DATABASE_NAME&#125; &gt;/tmp/api.sql</span><br><span class="line">&lt;a href=&quot;https://www.cnblogs.com/chenmh/p/5300370.html&quot;&gt;参考链接&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除并重新创建utf8mb4 的数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ drop database &#123;DATABASE_NAME&#125;;</span><br><span class="line">$ create database &#123;DATABASE_NAME&#125; default character set=&quot;utf8mb4&quot;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>导入数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ use &#123;DATABASE_NAME&#125;;</span><br><span class="line">$ source /tmp/api.sql</span><br><span class="line">&lt;a href=&quot;https://blog.csdn.net/helloxiaozhe/article/details/77680255&quot;&gt;参考链接&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启API服务</p>
+</li>
+</ol>
+</div><div class="article-meta" style="max-width:800px"><div class="categories"><i class="icon icon-category"></i><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/MySql/">MySql</a><span class="category-list-count">1</span></li></ul></div></div><div class="article-comment" style="max-width:800px"><div class="ds-thread" id="ds-thread" data-thread-key="cjvyyg2dc0006eqtpo5ydhl89" data-title="数据库字符集问题" data-url="http://yoursite.com/2019/05/22/数据库字符集问题/" site-name="ueibo"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+var duoshuoQuery = {short_name: siteName};
+(function() {
+  var ds = document.createElement('script');
+  ds.type = 'text/javascript';ds.async = true;
+  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+  ds.charset = 'UTF-8';
+  (document.getElementsByTagName('head')[0] 
+  || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2019/05/18/注解/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="https://github.com/weixuefeng" title="Github" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="https://blog.csdn.net/wxf468907066" title="CSDN" target="_blank"><i class="icon icon-CSDN"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2019 Pony Blog<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></div><script>var wrap = document.getElementById('wrap');
+window.onload = function () {
+  wrap.className += ' done';
+}</script></body></html>
