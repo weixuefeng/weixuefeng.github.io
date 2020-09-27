@@ -12,8 +12,8 @@
             "name": "NewUSDT",
             "symbol": "NUSDT",
             "decimals": 6
-        },
-        
+        }
+     
     ],
     "version": {
         "major": 3,
