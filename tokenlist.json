@@ -12,8 +12,49 @@
             "name": "NewUSDT",
             "symbol": "NUSDT",
             "decimals": 6
+        },
+        {
+            "chainId": 1007,
+            "address": "0x7Da6EfcF090f1020A5086BF391E067846045cf56",
+            "name": "NewMall Cash",
+            "symbol": "NMC",
+            "decimals": 18
+        },
+        {
+            "chainId": 1007,
+            "address": "0x243a5C81C1F9970aa3e6f51d73fC13eE853FC338",
+            "name": "TestNet Launch",
+            "symbol": "TL",
+            "decimals": 18
+        },
+        {
+            "chainId": 1007,
+            "address": "0x14d4dA0e79dE82604dcaD73EA0B2E2Db2FE5fE29",
+            "name": "CN",
+            "symbol": "CN",
+            "decimals": 18
+        },
+        {
+            "chainId": 1007,
+            "address": "0x483246B0Ae0B14DB4C4597C7CC4af2e2ea440a55",
+            "name": "Miaocai",
+            "symbol": "MCT",
+            "decimals": 18
+        },
+        {
+            "chainId": 1007,
+            "address": "0xEd4e695e436a4fCE38BBA9FB66D980aFD66b0e3e",
+            "name": "IMX",
+            "symbol": "IMX",
+            "decimals": 18
+        },
+        {
+            "chainId": 1007,
+            "address": "0xf99e673dbE4b8429A026fc957f4db719091D4a99",
+            "name": "NMTK",
+            "symbol": "NMTK",
+            "decimals": 0
         }
-     
     ],
     "version": {
         "major": 3,
