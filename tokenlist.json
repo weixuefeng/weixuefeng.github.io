@@ -1,7 +1,5 @@
 {"name":"NewSwap TestNet2","logoURI":"https://www.newtonproject.org/static/images/logo_v3/logo.svg?v=450","keywords":["defi"],"timestamp":"2020-09-13T09:38:06.416+00:00","tokens":[
 {"chainId":1007,"address":"0x20f12218281f9ca566b5c41f17c6c19050125cd3","name":"NewUSDT","symbol":"NUSDT","decimals":6},
 {"chainId":1007,"address":"0x7da6efcf090f1020a5086bf391e067846045cf56","name":"NewMall Cash","symbol":"NMC","decimals":18},
-{"chainId":1007,"address":"0x243a5c81c1f9970aa3e6f51d73fc13ee853fc338","name":"TestNet Launch","symbol":"TL","decimals":18},
-{"chainId":1007,"address":"0x14d4da0e79de82604dcad73ea0b2e2db2fe5fe29","name":"CN","symbol":"CN","decimals":18},
-{"chainId":1007,"address":"0xf99e673dbe4b8429a026fc957f4db719091d4a99","name":"NMTK","symbol":"NMTK","decimals":0}
+{"chainId":1007,"address":"0x243a5c81c1f9970aa3e6f51d73fc13ee853fc338","name":"TestNet Launch","symbol":"TL","decimals":18}
 ],"version":{"major":0,"minor":1,"patch":0}}
